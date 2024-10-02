@@ -8,7 +8,7 @@ teams.txt 給的。
 accounts.txt 給的。
 
 ## 使用方法
-1. 建立一個 teams.txt 跟 accounts.txt 文件，輸入帳號密碼，記得要一行對應一行。
+1. 建立 teams.txt 跟 accounts.txt 文件，分別輸入帳號密碼，記得要一行對應一行。
 
 2. 變數設定
     1. ```CATAGORIES_EXTERNAL_ID```:
