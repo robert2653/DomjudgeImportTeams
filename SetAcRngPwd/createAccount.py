@@ -32,20 +32,20 @@ def create_account_data(team_name):
 def set_font(cell: _Cell) -> None :
     cell.paragraphs[0].runs[0].font.name = "Times New Roman"  # 設置英文字體
     cell.paragraphs[0].runs[0].font.size = Pt(14)  # 字體大小
-    cell.paragraphs[0].runs[0]._element.rPr.rFonts.set(qn('w:eastAsia'), '標楷體')  # 設置中文字體
+    cell.paragraphs[0].runs[0]._element.rPr.rFonts.set(qn('w:eastAsia'), '微軟正黑體')  # 設置中文字體
 
 def create_word_document(teams):
     doc = Document()
-    table = doc.add_table(rows=1, cols=3)
+    table = doc.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
 
     # 設置列寬
-    for i, width in enumerate([10, 5, 5]):
+    for i, width in enumerate([5, 10, 2, 3]):
         table.columns[i].width = Cm(width)
     
     # 添加表頭
     hdr_cells = table.rows[0].cells
-    for i, header_text in enumerate(['隊伍名', '帳號', '密碼']):
+    for i, header_text in enumerate(['簽名', '隊伍名', '帳號', '密碼']):
         hdr_cells[i].text = header_text
         set_font(hdr_cells[i])
         hdr_cells[i].paragraphs[0].runs[0].font.bold = True
@@ -53,7 +53,7 @@ def create_word_document(teams):
     # 添加數據
     for team in teams:
         row_cells = table.add_row().cells
-        for i, cell_text in enumerate([team['name'], team['username'], team['password']]):
+        for i, cell_text in enumerate(['', team['name'], team['username'], team['password']]):
             row_cells[i].text = cell_text
             set_font(row_cells[i])
     
