@@ -1,8 +1,9 @@
 CATAGORIES_EXTERNAL_ID = ["First_Test"]
 TEAMS_TXT_FILE = "teams.txt"
+USERS_TXT_FILE = "users.txt"
 ACCOUNTS_DOCX = "accounts.docx" # 密碼紙
-iterater_team_id = 1 # 第一支隊伍 ID
-else_team_count = 5 # 用 team_id 當計分板名稱的數量
+iterater_team_id = 20 # 第一支隊伍 ID
+else_team_count = 0 # 用 team_id 當計分板名稱的數量
 
 from docx import Document
 from docx.shared import Cm, Pt
@@ -13,17 +14,20 @@ import json
 from generator import generatorPassword
 
 def read_file(filename):
-    with open(filename, "r", encoding='utf-8') as file:
-        return [line.strip() for line in file]
+    try:
+        with open(filename, "r", encoding='utf-8') as file:
+            return [line.strip() for line in file]
+    except:
+        return []
 
-def create_account_data(team_name):
+def create_account_data(team_name, user_name = ''):
     global iterater_team_id
     account = {
-        "id": "team{:03}".format(iterater_team_id), # extercal_id
+        "id": "team{:03}".format(iterater_team_id), # external_id
         "username": "team{:03}".format(iterater_team_id), # 帳號
         "password": generatorPassword(), # 密碼
         "type": "team", # 固定
-        "name": team_name, # 後臺名字
+        "name": (team_name if user_name == '' else user_name), # 後臺名字
         "team_id": "team{:03}".format(iterater_team_id) # 所屬的 team_external_id
     }
     iterater_team_id += 1
@@ -68,9 +72,13 @@ def create_word_document(teams):
 
 if __name__ == '__main__':
     team_names = read_file(TEAMS_TXT_FILE)
+    user_names = read_file(USERS_TXT_FILE)
+    if len(user_names) == 0:
+        user_names = [''] * len(team_names)
+
     accounts = []
-    for team_name in team_names:
-        accounts.append(create_account_data(team_name))
+    for i, team_name in enumerate(team_names):
+        accounts.append(create_account_data(team_name, user_names[i]))
 
     for i in range(else_team_count):
         accounts.append(create_account_data("team{:03}".format(iterater_team_id)))

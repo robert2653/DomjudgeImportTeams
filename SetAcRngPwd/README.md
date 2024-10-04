@@ -8,9 +8,12 @@ teamXXX 三位數，起始值要可在 ```iterater_team_id``` 自己設定，小
 隨機產生，不會出現 ```0oOlI1```，這幾種會混淆的。
 
 ## 使用方法
-1. 首先建立一個 teams.txt 文件
-    - 如果在 Scoreboard 上顯示的名稱要自創的話，在裡面寫入隊名，以換行隔開，如果不用自創隊名就留空。
-    - 如果有多個 txt 檔要創，例如要把 ```organization_id``` 分開的話，可以到兩個 .py 檔修改 ```TEAMS_TXT_FILE```，注意由於 domjudge import 的 json 檔名稱是固定的，所以請做完一組就 import 一次。
+1. 建立 txt 文件
+    1. 首先建立一個 teams.txt 文件
+        - 如果在 Scoreboard 上顯示的名稱要自創的話，在裡面寫入隊名，以換行隔開，如果不用自創隊名就留空。
+        - 如果有多個 txt 檔要創，例如要把 ```organization_id``` 分開的話，可以到兩個 .py 檔修改 ```TEAMS_TXT_FILE```，注意由於 domjudge import 的 json 檔名稱是固定的，所以請做完一組就 import 一次。
+
+    2. 如果要讓後台可以看到 team 裡的使用者是誰，再創一個 users.txt，裡面放要讓後台看到的名字。
 
 2. 變數設定
     1. ```CATAGORIES_EXTERNAL_ID```:
