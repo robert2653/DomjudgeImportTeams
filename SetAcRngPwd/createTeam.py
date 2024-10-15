@@ -1,8 +1,8 @@
-CATAGORIES_EXTERNAL_ID = ["First_Test"]
+CATAGORIES_EXTERNAL_ID = ["Test"]
 TEAMS_TXT_FILE = "teams.txt"
 ORGANIZATION_EXTERNAL_ID = "410430049"
 LOCATION = "TWD"
-iterater_team_id = 20 # 第一支隊伍 ID
+iterater_team_id = 100 # 第一支隊伍 ID
 else_team_count = 0 # 用 team_id 當計分板名稱的數量
 
 import json

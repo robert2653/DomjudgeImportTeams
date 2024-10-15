@@ -1,8 +1,8 @@
-CATAGORIES_EXTERNAL_ID = ["First_Test"]
+CATAGORIES_EXTERNAL_ID = ["Test"]
 TEAMS_TXT_FILE = "teams.txt"
 USERS_TXT_FILE = "users.txt"
 ACCOUNTS_DOCX = "accounts.docx" # 密碼紙
-iterater_team_id = 20 # 第一支隊伍 ID
+iterater_team_id = 100 # 第一支隊伍 ID
 else_team_count = 0 # 用 team_id 當計分板名稱的數量
 
 from docx import Document
@@ -38,7 +38,7 @@ def set_font(cell: _Cell) -> None :
     cell.paragraphs[0].runs[0].font.size = Pt(14)  # 字體大小
     cell.paragraphs[0].runs[0]._element.rPr.rFonts.set(qn('w:eastAsia'), '微軟正黑體')  # 設置中文字體
 
-def create_word_document(teams):
+def create_word_document(teams, accounts):
     doc = Document()
     table = doc.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
@@ -55,9 +55,9 @@ def create_word_document(teams):
         hdr_cells[i].paragraphs[0].runs[0].font.bold = True
     
     # 添加數據
-    for team in teams:
+    for i in range(len(teams)):
         row_cells = table.add_row().cells
-        for i, cell_text in enumerate(['', team['name'], team['username'], team['password']]):
+        for i, cell_text in enumerate(['', teams[i], accounts[i]['username'], accounts[i]['password']]):
             row_cells[i].text = cell_text
             set_font(row_cells[i])
     
@@ -77,8 +77,8 @@ if __name__ == '__main__':
         user_names = [''] * len(team_names)
 
     accounts = []
-    for i, team_name in enumerate(team_names):
-        accounts.append(create_account_data(team_name, user_names[i]))
+    for i in range(len(team_names)):
+        accounts.append(create_account_data(team_names[i], user_names[i]))
 
     for i in range(else_team_count):
         accounts.append(create_account_data("team{:03}".format(iterater_team_id)))
@@ -86,6 +86,6 @@ if __name__ == '__main__':
     with open("accounts.json", 'w', encoding='utf-8') as accountsFile:
         json.dump(accounts, accountsFile, indent=2, ensure_ascii=False)
 
-    create_word_document(accounts)
+    create_word_document(team_names, accounts)
 
     print("accounts.json and accounts.docx created successfully")
