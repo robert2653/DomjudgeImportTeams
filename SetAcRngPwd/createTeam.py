@@ -1,8 +1,8 @@
-CATAGORIES_EXTERNAL_ID = ["Test"]
+CATAGORIES_EXTERNAL_ID = [""]
 TEAMS_TXT_FILE = "teams.txt"
-ORGANIZATION_EXTERNAL_ID = "410430049"
+ORGANIZATION_EXTERNAL_ID = ""
 LOCATION = "TWD"
-iterater_team_id = 100 # 第一支隊伍 ID
+iterater_team_id = 0 # 第一支隊伍 ID
 else_team_count = 0 # 用 team_id 當計分板名稱的數量
 
 import json
@@ -25,9 +25,10 @@ def create_team_data(team_name):
     iterater_team_id += 1
     return team
 
-if __name__ == '__main__':
+def main():
     team_names = read_file(TEAMS_TXT_FILE)
     teams = []
+    
     for team_name in team_names:
         teams.append(create_team_data(team_name))
 
@@ -38,3 +39,6 @@ if __name__ == '__main__':
         json.dump(teams, teamsFile, indent=2, ensure_ascii=False)
 
     print("teams.json created successfully")
+
+if __name__ == '__main__':
+    main()

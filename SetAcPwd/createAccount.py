@@ -1,35 +1,48 @@
 CATAGORIES_EXTERNAL_ID = [""]
 TEAMS_TXT_FILE = "teams.txt" # ACCOUNT
-ACCOUNTS_TXT_FILE = "accounts.txt" # PASSWORD
-TEAM_COUNT = 3
+USERS_TXT_FILE = "users.txt"
+PASSWORDS_TXT_FILE = "passwords.txt" # PASSWORD
 
 import json
 
 def read_file(filename):
-    with open(filename, "r", encoding='utf-8') as file:
-        return [line.strip() for line in file]
+    try:
+        with open(filename, "r", encoding='utf-8') as file:
+            return [line.strip() for line in file]
+    except:
+        return []
     
 
-def create_team_data(accounts, team_names):
-    teams = []
-    for account, name in zip(accounts, team_names):
-        team = {
-            "id": name, # extercal_id
-            "username": name, # 帳號
-            "password": account, # 密碼
-            "type": "team",
-            "name": name, # 後台可看名稱
-            "team_id": name
-        }
-        teams.append(team)
-    return teams
+def create_account_data(team_name, password, user_name = ''):
+    if user_name == '':
+        user_name = team_name
 
-accounts = read_file(ACCOUNTS_TXT_FILE)
-team_names = read_file(TEAMS_TXT_FILE)
+    account = {
+        "id": team_name, # extercal_id
+        "username": team_name, # 帳號
+        "password": password, # 密碼
+        "type": "team",
+        "name": user_name, # 後台可看名稱
+        "team_id": team_name
+    }
+    return account
 
-teams = create_team_data(accounts, team_names)
+def main():
+    team_names = read_file(TEAMS_TXT_FILE)
+    passwords = read_file(PASSWORDS_TXT_FILE)
+    user_names = read_file(USERS_TXT_FILE)
+    if len(user_names) == 0:
+        user_names = [''] * len(team_names)
 
-with open("accounts.json", 'w', encoding='utf-8') as teamsFile:
-    json.dump(teams, teamsFile, indent=2, ensure_ascii=False)
+    accounts = []
 
-print("accounts.json created successfully")
+    for team_name, password, user_name in zip(team_names, passwords, user_names):
+        accounts.append(create_account_data(team_name, password, user_name))
+
+    with open("accounts.json", 'w', encoding='utf-8') as teamsFile:
+        json.dump(accounts, teamsFile, indent=2, ensure_ascii=False)
+
+    print("accounts.json created successfully")
+
+if __name__ == "__main__":
+    main()

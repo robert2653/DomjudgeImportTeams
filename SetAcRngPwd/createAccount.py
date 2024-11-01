@@ -1,8 +1,8 @@
-CATAGORIES_EXTERNAL_ID = ["Test"]
+CATAGORIES_EXTERNAL_ID = [""]
 TEAMS_TXT_FILE = "teams.txt"
 USERS_TXT_FILE = "users.txt"
-ACCOUNTS_DOCX = "accounts.docx" # 密碼紙
-iterater_team_id = 100 # 第一支隊伍 ID
+PASSWORDS_DOCX = "passwords.docx" # 密碼紙
+iterater_team_id = 0 # 第一支隊伍 ID
 else_team_count = 0 # 用 team_id 當計分板名稱的數量
 
 from docx import Document
@@ -20,25 +20,12 @@ def read_file(filename):
     except:
         return []
 
-def create_account_data(team_name, user_name = ''):
-    global iterater_team_id
-    account = {
-        "id": "team{:03}".format(iterater_team_id), # external_id
-        "username": "team{:03}".format(iterater_team_id), # 帳號
-        "password": generatorPassword(), # 密碼
-        "type": "team", # 固定
-        "name": (team_name if user_name == '' else user_name), # 後臺名字
-        "team_id": "team{:03}".format(iterater_team_id) # 所屬的 team_external_id
-    }
-    iterater_team_id += 1
-    return account
-
 def set_font(cell: _Cell) -> None :
     cell.paragraphs[0].runs[0].font.name = "Times New Roman"  # 設置英文字體
     cell.paragraphs[0].runs[0].font.size = Pt(14)  # 字體大小
     cell.paragraphs[0].runs[0]._element.rPr.rFonts.set(qn('w:eastAsia'), '微軟正黑體')  # 設置中文字體
 
-def create_word_document(teams, accounts):
+def create_word_document(team_names, passwords):
     doc = Document()
     table = doc.add_table(rows=1, cols=4)
     table.style = 'Table Grid'
@@ -55,9 +42,9 @@ def create_word_document(teams, accounts):
         hdr_cells[i].paragraphs[0].runs[0].font.bold = True
     
     # 添加數據
-    for i in range(len(teams)):
+    for i in range(len(team_names)):
         row_cells = table.add_row().cells
-        for i, cell_text in enumerate(['', teams[i], accounts[i]['username'], accounts[i]['password']]):
+        for i, cell_text in enumerate(['', team_names[i], passwords[i]['username'], passwords[i]['password']]):
             row_cells[i].text = cell_text
             set_font(row_cells[i])
     
@@ -68,17 +55,35 @@ def create_word_document(teams, accounts):
             cell.paragraphs[0].paragraph_format.alignment = WD_TABLE_ALIGNMENT.LEFT
             cell.paragraphs[0].paragraph_format.line_spacing = 1.5  # 設置行距
     
-    doc.save(ACCOUNTS_DOCX)
+    doc.save(PASSWORDS_DOCX)
 
-if __name__ == '__main__':
+def create_account_data(team_name, user_name = ''):
+    if user_name == '':
+        user_name = team_name
+
+    global iterater_team_id
+    account = {
+        "id": "team{:03}".format(iterater_team_id), # external_id
+        "username": "team{:03}".format(iterater_team_id), # 帳號
+        "password": generatorPassword(), # 密碼
+        "type": "team", # 固定
+        "name": user_name, # 後臺名字
+        "team_id": "team{:03}".format(iterater_team_id) # 所屬的 team_external_id
+    }
+    iterater_team_id += 1
+    return account
+
+def main():
     team_names = read_file(TEAMS_TXT_FILE)
     user_names = read_file(USERS_TXT_FILE)
+
     if len(user_names) == 0:
         user_names = [''] * len(team_names)
 
     accounts = []
-    for i in range(len(team_names)):
-        accounts.append(create_account_data(team_names[i], user_names[i]))
+
+    for team_name, user_name in zip(team_names, user_names):
+        accounts.append(create_account_data(team_name, user_name))
 
     for i in range(else_team_count):
         accounts.append(create_account_data("team{:03}".format(iterater_team_id)))
@@ -87,5 +92,7 @@ if __name__ == '__main__':
         json.dump(accounts, accountsFile, indent=2, ensure_ascii=False)
 
     create_word_document(team_names, accounts)
-
     print("accounts.json and accounts.docx created successfully")
+    
+if __name__ == '__main__':
+    main()
