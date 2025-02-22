@@ -1,6 +1,7 @@
 CATAGORIES_EXTERNAL_ID = ["students"]
 TEAMS_TXT_FILE = "teams.txt" # ACCOUNT
 USERS_TXT_FILE = "users.txt"
+PASSWORDS_TXT_FILE = "passwords.txt"
 
 import json
 
