@@ -17,8 +17,8 @@ def create_team_data(team_name):
         "id": "team{:03}".format(iterater_team_id), # extercal_id
         # "icpc_id": account,
         "group_ids": CATAGORIES_EXTERNAL_ID, # catagory belong to
-        "name": team_name,
-        "display_name": team_name, # scoreboard name
+        "name": str(team_name),
+        "display_name": str(team_name), # scoreboard name
         "organization_id": ORGANIZATION_EXTERNAL_ID, # 組織
         "location.description": LOCATION, # country
     }

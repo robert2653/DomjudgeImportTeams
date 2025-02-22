@@ -99,8 +99,8 @@ def create_word_document(team_names: list[str], accounts: dict) -> None:
     
     doc.save(PASSWORDS_DOCX)
 
-def create_account_data(team_name, user_name = '') -> dict:
-    if user_name == '':
+def create_account_data(team_name, user_name = None) -> dict:
+    if user_name is None:
         user_name = team_name
 
     global iterater_team_id
@@ -109,7 +109,7 @@ def create_account_data(team_name, user_name = '') -> dict:
         "username": "team{:03}".format(iterater_team_id), # 帳號
         "password": generatorPassword(), # 密碼
         "type": "team", # 固定
-        "name": user_name, # 後臺名字
+        "name": str(user_name), # 後臺名字
         "team_id": "team{:03}".format(iterater_team_id) # 所屬的 team_external_id
     }
     iterater_team_id += 1
