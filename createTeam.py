@@ -10,16 +10,16 @@ def read_file(filename):
     with open(filename, "r", encoding='utf-8') as file:
         return [line.strip() for line in file]
 
-def create_team_data(team_name, user_name = ''):
-    if user_name == '':
+def create_team_data(team_name, user_name = None):
+    if user_name is None:
         user_name = team_name
 
     team = {
-        "id": team_name, # extercal_id
-        # "icpc_id": account,
+        "id": str(team_name), # extercal_id
+        # "icpc_id": str(account),
         "group_ids": CATAGORIES_EXTERNAL_ID, # catagory belong to
-        "name": team_name,
-        "display_name": user_name, # scoreboard name
+        "name": str(team_name),
+        "display_name": str(user_name), # scoreboard name
         # "organization_id": ORGANIZATION_EXTERNAL_ID, # 組織
         # "location.description": LOCATION, # country
     }

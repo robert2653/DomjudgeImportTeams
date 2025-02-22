@@ -13,17 +13,17 @@ def read_file(filename):
         return []
     
 
-def create_account_data(team_name, password, user_name = ''):
-    if user_name == '':
+def create_account_data(team_name, password, user_name = None):
+    if user_name is None:
         user_name = team_name
 
     account = {
-        "id": team_name, # extercal_id
-        "username": team_name, # 帳號
-        "password": password, # 密碼
+        "id": str(team_name), # external_id
+        "username": str(team_name), # 帳號
+        "password": str(password), # 密碼
         "type": "team",
-        "name": user_name, # 後台可看名稱
-        "team_id": team_name
+        "name": str(user_name), # 後台可看名稱
+        "team_id": str(team_name)
     }
     return account
 
