@@ -1,7 +1,6 @@
-CATAGORIES_EXTERNAL_ID = [""]
+CATAGORIES_EXTERNAL_ID = ["students"]
 TEAMS_TXT_FILE = "teams.txt" # ACCOUNT
 USERS_TXT_FILE = "users.txt"
-PASSWORDS_TXT_FILE = "passwords.txt" # PASSWORD
 
 import json
 
@@ -29,8 +28,11 @@ def create_account_data(team_name, password, user_name = ''):
 
 def main():
     team_names = read_file(TEAMS_TXT_FILE)
+    print(len(team_names))
     passwords = read_file(PASSWORDS_TXT_FILE)
+    print(len(passwords))
     user_names = read_file(USERS_TXT_FILE)
+    print(len(user_names))
     if len(user_names) == 0:
         user_names = [''] * len(team_names)
 
