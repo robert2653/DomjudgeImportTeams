@@ -1,9 +1,9 @@
-CATAGORIES_EXTERNAL_ID = ["Second_Contest"]
-TEAMS_TXT_FILE = "teams.txt"
-USERS_TXT_FILE = "users.txt"
-PASSWORDS_DOCX = "passwords.docx" # 密碼紙
-iterater_team_id = 300 # 第一支隊伍 ID
-else_team_count = 5 # 用 team_id 當計分板名稱的數量
+CATAGORIES_EXTERNAL_ID = ["test"]
+TEAMS_TXT_FILE = "pineapple_teams.txt"
+USERS_TXT_FILE = "pineapple_users.txt"
+PASSWORDS_DOCX = "pineapple_passwords.docx" # 密碼紙
+iterater_team_id = 1 # 第一支隊伍 ID
+else_team_count = 0 # 用 team_id 當計分板名稱的數量
 
 from docx import Document
 from docx.shared import Cm, Pt

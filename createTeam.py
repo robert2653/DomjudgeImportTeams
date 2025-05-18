@@ -1,9 +1,9 @@
-CATAGORIES_EXTERNAL_ID = ["Second_Contest"]
-TEAMS_TXT_FILE = "teams.txt"
+CATAGORIES_EXTERNAL_ID = ["test"]
+TEAMS_TXT_FILE = "pineapple_teams.txt"
 ORGANIZATION_EXTERNAL_ID = ""
 LOCATION = "TWD"
-iterater_team_id = 300 # 第一支隊伍 ID
-else_team_count = 5 # 用 team_id 當計分板名稱的數量
+iterater_team_id = 1 # 第一支隊伍 ID
+else_team_count = 0 # 用 team_id 當計分板名稱的數量
 
 import json
 
@@ -18,7 +18,8 @@ def create_team_data(team_name):
         # "icpc_id": account,
         "group_ids": CATAGORIES_EXTERNAL_ID, # catagory belong to
         "name": str(team_name),
-        "display_name": str(team_name), # scoreboard name
+        # "display_name": str(team_name), # scoreboard name
+        "display_name": "team{:03}".format(iterater_team_id), # scoreboard name
         "organization_id": ORGANIZATION_EXTERNAL_ID, # 組織
         "location.description": LOCATION, # country
     }
