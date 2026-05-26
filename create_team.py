@@ -1,5 +1,5 @@
-CATAGORIES_EXTERNAL_ID = ["test"]
-TEAMS_TXT_FILE = "pineapple_teams.txt"
+CATAGORIES_EXTERNAL_ID = [""]
+TEAMS_TXT_FILE = "teams.txt"
 ORGANIZATION_EXTERNAL_ID = ""
 LOCATION = "TWD"
 iterater_team_id = 1 # 第一支隊伍 ID
@@ -14,12 +14,12 @@ def read_file(filename):
 def create_team_data(team_name):
     global iterater_team_id
     team = {
-        "id": "team{:03}".format(iterater_team_id), # extercal_id
+        "id": "team{:03}".format(iterater_team_id), # external_id
         # "icpc_id": account,
-        "group_ids": CATAGORIES_EXTERNAL_ID, # catagory belong to
+        "group_ids": CATAGORIES_EXTERNAL_ID, # catagory belongs to
         "name": str(team_name),
-        # "display_name": str(team_name), # scoreboard name
-        "display_name": "team{:03}".format(iterater_team_id), # scoreboard name
+        # "display_name": str(team_name), # name on scoreboard
+        "display_name": "team{:03}".format(iterater_team_id), # name on scoreboard
         "organization_id": ORGANIZATION_EXTERNAL_ID, # 組織
         "location.description": LOCATION, # country
     }

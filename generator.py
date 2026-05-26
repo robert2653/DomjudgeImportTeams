@@ -1,7 +1,7 @@
 import random
 import string
 
-def generatorPassword(len : int = 8):
+def password_generator(len : int = 8):
     characters = string.ascii_letters + string.digits
 
     excluded_characters = '0oOlI1'  

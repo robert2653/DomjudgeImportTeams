@@ -1,54 +1,64 @@
-## 用途
-密碼隨機，適合辦在正式比賽。
+# DOMjudge Import Teams
 
-## 帳號
-teamXXX 三位數，起始值要可在 ```iterater_team_id``` 自己設定，小心不要撞已經有的。
+本專案提供了一套自動化腳本，用於批次產生可以匯入至 [DOMjudge](https://www.domjudge.org/) 的 `teams.json` 與 `accounts.json`，並同時產生便於列印發放的密碼紙 (Word 文件)。
 
-## 密碼
-隨機產生，不會出現 ```0oOlI1```，這幾種會混淆的。
+## ✨ 主要功能
 
-## 使用方法
-1. 建立 txt 文件
-    1. 首先建立一個 teams.txt 文件
-        - 如果在 Scoreboard 上顯示的名稱要自創的話，在裡面寫入隊名，以換行隔開，如果不用自創隊名就留空。
-        - 如果有多個 txt 檔要創，例如要把 ```organization_id``` 分開的話，可以到兩個 .py 檔修改 ```TEAMS_TXT_FILE```，注意由於 domjudge import 的 json 檔名稱是固定的，所以請做完一組就 import 一次。
+- **批次產生隊伍與帳號**：透過簡單的 txt 檔案讀入隊伍名稱與使用者名單。
+- **安全的隨機密碼**：自動產生易讀且安全的隨機密碼（排除易混淆字元如 `0, o, O, l, I, 1`）。
+- **密碼紙匯出**：自動產生包含隊伍名稱、帳號與密碼的 Word 文件，方便比賽當天裁切發放給選手。
+- **高度客製化**：可設定隊伍隸屬的分類 (Categories)、機構 (Organizations)、以及 Scoreboard 上的顯示方式（實名或匿名）。
+- **備用帳號產生**：可以指定數量，一次建立額外的備用隊伍與帳號。
 
-    2. 如果要讓後台可以看到 team 裡的使用者是誰，再創一個 users.txt，裡面放要讓後台看到的名字。
+## 📁 檔案結構說明
 
-2. 變數設定
-    1. ```CATAGORIES_EXTERNAL_ID```:
-        隊伍所屬的 Group，要去 ```Team Categories``` 複製 ```external_id```。
-    2. ```TEAMS_TXT_FILE```:
-        讀入的隊伍名，檔案可留空，但一定要創。
-    3. ```ACCOUNTS_DOCX```:
-        密碼紙的 word 檔名。
-    4. ```ORGANIZATION_EXTERNAL_ID```:
-        隊伍的機構名稱，要去 ```Team Affiliations``` 複製 ```external_id```，如果不需要設定就把會用到的地方註解掉。
-    5. ```LOCATION```:
-        隊伍的國家，如果不需要設定就把會用到的地方註解掉。
-    6. ```else_team_count```:
-        比較複雜，到使用方法的第三點展開。
-    7. ```iterater_team_id```:
-        就是帳號，此值會設定第一個帳號名稱，例如為 1 是 team001, team002...，100 是 team100, team101...，
-        程式會先掃過 ```teams.txt```、再來是 ```else_team_count```。
+在執行腳本前，可以根據需求準備以下檔案（若無特殊需求，檔案可留空）：
 
-3. 帳密、Scoreboard 顯示隊名:
-    以下是一些情況。
-    1. Scoreboard 名稱自創:
-        - Scoreboard 顯示的隊名跟隨 txt 給的隊名。
-        - 設定 ```else_team_count``` 代表備用帳號數量，這些帳號在 Scoreboard 顯示的隊名會跟隨 ```iterater_team_id```，也就是他們的帳號。
-    2. Scoreboard 匿名:
-        - 跟第一點一樣，只是 Scoreboard 顯示的隊名統一跟隨帳號 TeamXXX，但是密碼紙一樣可以認人。
-        - 去 ```createTeam.py``` 的 ```create_team_data``` 把 "display_name" 改成跟 "id" 一樣。
-    3. 直接建立一定數字的帳號:
-        - 把 ```teams.txt``` 留空，設定這個數字代表要建立多少帳號。
+- `teams.txt`：隊伍名稱列表，每行一個隊伍名稱。
+- `users.txt`（可選）：設定讓後台看見的具體使用者姓名。若提供，行數需與 `teams.txt` 一致。
+- `passwords.txt`（可選）：若想自訂密碼可填入，若留空將自動隨機產生。若提供，行數需與 `teams.txt` 一致。
 
-4. 運行兩個 .py 檔
-5. 到 domjudge import
+## ⚙️ 腳本變數設定
 
-    Import -> Import JSON / YAML
+在執行前，請至 `.py` 腳本 (`create_team.py` 與 `create_account.py`) 中修改全域變數，以符合您的比賽設定：
 
-    1. Type 選 team，File 選 teams.json
-    2. Type 選 account，File 選 accounts.json
+- `iterater_team_id`：設定第一個帳號的起始編號。例如設為 `1`，將會依序產生 `team001`, `team002`...（請注意不要與 DOMjudge 系統中既有的隊伍編號衝突）。
+- `else_team_count`：欲額外產生的「備用帳號」數量。備用帳號除了供現場臨時隊伍使用外，在計分板上的預設名稱會跟隨其帳號 ID。
+- `CATAGORIES_EXTERNAL_ID`：隊伍隸屬的群組（Group）。需至 DOMjudge 後台的 `Team Categories` 複製其 `external_id`。
+- `ORGANIZATION_EXTERNAL_ID`：隊伍隸屬的機構（Organization）。需至 DOMjudge 後台的 `Team Affiliations` 複製 `external_id`（若不需要設定，在程式中將相關附值註解掉即可）。
+- `LOCATION`：隊伍所屬的國家 / 區域代碼（預設為 `TWD`）。
 
-    以上要照順序。
+### 🏆 計分板 (Scoreboard) 隊名顯示設定
+
+- **顯示自創隊名**：至 `create_team.py` 的 `create_team_data()` 函式內，將 `"display_name": str(team_name)` 取消註解，這樣計分板上就會顯示 `teams.txt` 內的自設隊名。
+- **匿名隊名 (預設)**：程式預設將 `display_name` 設定為 `"team{:03}".format(iterater_team_id)`。計分板上將統一顯示帳號名稱（`teamXXX`），但密碼紙依舊會打上真實隊名以便現場人員發放。
+
+## 🚀 使用流程
+
+1. **安裝依賴套件**
+   本專案使用 `python-docx` 來產生密碼紙 Word 檔案。在執行前請確保已安裝該套件：
+   ```bash
+   pip install python-docx
+   ```
+
+2. **準備資料**
+   填寫前述提到的 `teams.txt` 及其他對應的文字檔。
+   *(如果想直接大量建立純編號隊伍，請將 `teams.txt` 留空，並調整 `else_team_count` 指定要創建的數量即可)*
+
+3. **執行腳本**
+   分別或一併執行這兩個產生腳本：
+   ```bash
+   python create_team.py
+   python create_account.py
+   ```
+   腳本執行完畢後，資料夾內會產生 `teams.json`、`accounts.json`，以及給選手的密碼紙 `passwords.docx` (名稱根據腳本設定而定)。
+
+4. **匯入至 DOMjudge**
+   進入 DOMjudge 的系統管理員後台：
+   - 前往 **Import -> Import JSON / YAML**
+   - **第一步 (隊伍)**：Type 選擇 `team`，File 選擇剛剛產生的 `teams.json`，點擊匯入。
+   - **第二步 (帳號)**：Type 選擇 `account`，File 選擇剛剛產生的 `accounts.json`，點擊匯入。
+
+   > **⚠️ 注意事項：**
+   > 必須嚴格遵守上述順序 (先 Teams 後 Accounts)。
+   > 因為 DOMjudge 匯入時不挑檔名，若您要將不同群組 (如不同 `organization_id`) 的隊伍分開創立，請採分批處理：修改變數 👉 執行腳本 👉 匯入 DOMjudge 👉 修改變數並處理下一批。

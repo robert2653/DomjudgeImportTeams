@@ -1,25 +1,11 @@
-CATAGORIES_EXTERNAL_ID = ["test"]
-TEAMS_TXT_FILE = "pineapple_teams.txt"
-USERS_TXT_FILE = "pineapple_users.txt"
-PASSWORDS_DOCX = "pineapple_passwords.docx" # 密碼紙
-iterater_team_id = 1 # 第一支隊伍 ID
-else_team_count = 0 # 用 team_id 當計分板名稱的數量
-
 from docx import Document
 from docx.shared import Cm, Pt
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.table import _Cell
 from docx.oxml import OxmlElement
-import json
-from generator import generatorPassword
 
-def read_file(filename: str) -> list[str]:
-    try:
-        with open(filename, "r", encoding='utf-8') as file:
-            return [line.strip() for line in file]
-    except:
-        return []
+PASSWORDS_DOCX = "passwords.docx" # 密碼紙
 
 def set_font(cell: _Cell) -> None:
     cell.paragraphs[0].runs[0].font.name = "Times New Roman"  # 設置英文字體
@@ -98,44 +84,3 @@ def create_word_document(team_names: list[str], accounts: dict) -> None:
             cell.paragraphs[0].paragraph_format.line_spacing = 1.5  # 設置行距
     
     doc.save(PASSWORDS_DOCX)
-
-def create_account_data(team_name, user_name = None) -> dict:
-    if user_name is None:
-        user_name = team_name
-
-    global iterater_team_id
-    account = {
-        "id": "team{:03}".format(iterater_team_id), # external_id
-        "username": "team{:03}".format(iterater_team_id), # 帳號
-        "password": generatorPassword(), # 密碼
-        "type": "team", # 固定
-        "name": str(user_name), # 後臺名字
-        "team_id": "team{:03}".format(iterater_team_id) # 所屬的 team_external_id
-    }
-    iterater_team_id += 1
-    return account
-
-def main():
-    team_names = read_file(TEAMS_TXT_FILE)
-    user_names = read_file(USERS_TXT_FILE)
-
-    if len(user_names) == 0:
-        user_names = [''] * len(team_names)
-
-    accounts = []
-
-    for team_name, user_name in zip(team_names, user_names):
-        accounts.append(create_account_data(team_name, user_name))
-
-    for i in range(else_team_count):
-        team_names.append("team{:03}".format(iterater_team_id))
-        accounts.append(create_account_data("team{:03}".format(iterater_team_id)))
-
-    with open("accounts.json", 'w', encoding='utf-8') as accountsFile:
-        json.dump(accounts, accountsFile, indent=2, ensure_ascii=False)
-
-    create_word_document(team_names, accounts)
-    print("accounts.json and accounts.docx created successfully")
-    
-if __name__ == '__main__':
-    main()
