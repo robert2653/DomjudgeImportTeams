@@ -17,7 +17,7 @@ def read_file(filename: str) -> list[str]:
     except:
         return []
 
-def create_account_data(user_name, password) -> dict:
+def create_account_data(team_name, user_name, password) -> dict:
     global iterater_team_id
     account = {
         "id": "team{:03}".format(iterater_team_id), # external_id
@@ -46,12 +46,12 @@ def main():
 
     accounts = []
 
-    for user_name, password in zip(user_names, passwords):
-        accounts.append(create_account_data(user_name, password))
+    for team_name, user_name, password in zip(team_names, user_names, passwords):
+        accounts.append(create_account_data(team_name, user_name, password))
 
     for _ in range(else_team_count):
         team_names.append("team{:03}".format(iterater_team_id))
-        accounts.append(create_account_data("team{:03}".format(iterater_team_id)))
+        accounts.append(create_account_data("team{:03}".format(iterater_team_id), "team{:03}".format(iterater_team_id), password_generator()))
 
     with open("accounts.json", 'w', encoding='utf-8') as accountsFile:
         json.dump(accounts, accountsFile, indent=2, ensure_ascii=False)
